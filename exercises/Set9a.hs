@@ -10,11 +10,12 @@
 
 module Set9a where
 
-import Data.Char
-import Data.List
-import Data.Ord
+import           Data.Char
+import           Data.List
+import           Data.Ord
 
-import Mooc.Todo
+import           Data.Foldable (Foldable (fold))
+import           Mooc.Todo
 
 ------------------------------------------------------------------------------
 -- Ex 1: Implement a function workload that takes in the number of
@@ -26,7 +27,12 @@ import Mooc.Todo
 -- Otherwise return "Ok."
 
 workload :: Int -> Int -> String
-workload nExercises hoursPerExercise = todo
+workload nExercises hoursPerExercise = workload' (nExercises * hoursPerExercise)
+  where
+    workload' n
+      | n > 100 = "Holy moly!"
+      | n < 10 = "Piece of cake!"
+      | otherwise = "Ok."
 
 ------------------------------------------------------------------------------
 -- Ex 2: Implement the function echo that builds a string like this:
@@ -39,7 +45,8 @@ workload nExercises hoursPerExercise = todo
 -- Hint: use recursion
 
 echo :: String -> String
-echo = todo
+echo []     = []
+echo (s:sx) = (s:sx) ++ ", " ++ echo sx
 
 ------------------------------------------------------------------------------
 -- Ex 3: A country issues some banknotes. The banknotes have a serial
@@ -52,7 +59,11 @@ echo = todo
 -- are valid.
 
 countValid :: [String] -> Int
-countValid = todo
+countValid sx = length (filter isValid sx)
+  where
+    isValid s = q1 s || q2 s
+    q1 s = s !! 2 == s !! 4
+    q2 s = s !! 3 == s !! 5
 
 ------------------------------------------------------------------------------
 -- Ex 4: Find the first element that repeats two or more times _in a
@@ -64,7 +75,11 @@ countValid = todo
 --   repeated [1,2,1,2,3,3] ==> Just 3
 
 repeated :: Eq a => [a] -> Maybe a
-repeated = todo
+repeated [] = Nothing
+repeated [_] = Nothing
+repeated (x1:x2:xs)
+  | x1 == x2   = Just x1
+  | otherwise = repeated (x2:xs)
 
 ------------------------------------------------------------------------------
 -- Ex 5: A laboratory has been collecting measurements. Some of the
@@ -86,7 +101,10 @@ repeated = todo
 --     ==> Left "no data"
 
 sumSuccess :: [Either String Int] -> Either String Int
-sumSuccess = todo
+sumSuccess m = sumSuccess' [a | Right a <- m]
+  where
+    sumSuccess' [] = Left "no data"
+    sumSuccess' ms = Right $ sum ms
 
 ------------------------------------------------------------------------------
 -- Ex 6: A combination lock can either be open or closed. The lock
@@ -108,30 +126,36 @@ sumSuccess = todo
 --   isOpen (open "0000" (lock (changeCode "0000" (open "1234" aLock)))) ==> True
 --   isOpen (open "1234" (lock (changeCode "0000" (open "1234" aLock)))) ==> False
 
-data Lock = LockUndefined
+data Lock = Locked String | Unlocked String
   deriving Show
 
 -- aLock should be a locked lock with the code "1234"
 aLock :: Lock
-aLock = todo
+aLock = Locked "1234"
 
 -- isOpen returns True if the lock is open
 isOpen :: Lock -> Bool
-isOpen = todo
+isOpen (Unlocked _) = True
+isOpen _ = False
 
 -- open tries to open the lock with the given code. If the code is
 -- wrong, nothing happens.
 open :: String -> Lock -> Lock
-open = todo
+open _ (Unlocked key) = Unlocked key
+open testkey (Locked key)
+  | testkey == key = Unlocked key
+  | otherwise = Locked key
 
 -- lock closes a lock. If the lock is already closed, nothing happens.
 lock :: Lock -> Lock
-lock = todo
+lock (Unlocked key) = Locked key
+lock (Locked key) = Locked key
 
 -- changeCode changes the code of an open lock. If the lock is closed,
 -- nothing happens.
 changeCode :: String -> Lock -> Lock
-changeCode = todo
+changeCode key (Unlocked _) = Unlocked key
+changeCode _ l = l
 
 ------------------------------------------------------------------------------
 -- Ex 7: Here's a type Text that just wraps a String. Implement an Eq
@@ -149,6 +173,10 @@ changeCode = todo
 data Text = Text String
   deriving Show
 
+
+instance Eq Text where
+  Text s1 == Text s2 = f s1 == f s2
+    where f = filter (not . Data.Char.isSpace) 
 
 ------------------------------------------------------------------------------
 -- Ex 8: We can represent functions or mappings as lists of pairs.
