@@ -27,12 +27,12 @@ import           Mooc.Todo
 -- Otherwise return "Ok."
 
 workload :: Int -> Int -> String
-workload nExercises hoursPerExercise = workload' (nExercises * hoursPerExercise)
+workload nExercises hoursPerExercise
+  | hours > 100 = "Holy moly!"
+  | hours < 10 = "Piece of cake!"
+  | otherwise = "Ok."
   where
-    workload' n
-      | n > 100 = "Holy moly!"
-      | n < 10 = "Piece of cake!"
-      | otherwise = "Ok."
+    hours = nExercises * hoursPerExercise
 
 ------------------------------------------------------------------------------
 -- Ex 2: Implement the function echo that builds a string like this:
@@ -77,9 +77,9 @@ countValid sx = length (filter isValid sx)
 repeated :: Eq a => [a] -> Maybe a
 repeated [] = Nothing
 repeated [_] = Nothing
-repeated (x1:x2:xs)
-  | x1 == x2   = Just x1
-  | otherwise = repeated (x2:xs)
+repeated (x1:x2:xs) = if x1 == x2
+  then Just x1
+  else repeated (x2:xs)
 
 ------------------------------------------------------------------------------
 -- Ex 5: A laboratory has been collecting measurements. Some of the
@@ -136,7 +136,7 @@ aLock = Locked "1234"
 -- isOpen returns True if the lock is open
 isOpen :: Lock -> Bool
 isOpen (Unlocked _) = True
-isOpen _ = False
+isOpen _            = False
 
 -- open tries to open the lock with the given code. If the code is
 -- wrong, nothing happens.
@@ -149,13 +149,13 @@ open testkey (Locked key)
 -- lock closes a lock. If the lock is already closed, nothing happens.
 lock :: Lock -> Lock
 lock (Unlocked key) = Locked key
-lock (Locked key) = Locked key
+lock l              = l
 
 -- changeCode changes the code of an open lock. If the lock is closed,
 -- nothing happens.
 changeCode :: String -> Lock -> Lock
 changeCode key (Unlocked _) = Unlocked key
-changeCode _ l = l
+changeCode _ l              = l
 
 ------------------------------------------------------------------------------
 -- Ex 7: Here's a type Text that just wraps a String. Implement an Eq
@@ -176,7 +176,7 @@ data Text = Text String
 
 instance Eq Text where
   Text s1 == Text s2 = f s1 == f s2
-    where f = filter (not . Data.Char.isSpace) 
+    where f = filter (not . isSpace)
 
 ------------------------------------------------------------------------------
 -- Ex 8: We can represent functions or mappings as lists of pairs.
@@ -212,7 +212,7 @@ instance Eq Text where
 compose :: (Eq a, Eq b) => [(a,b)] -> [(b,c)] -> [(a,c)]
 compose [] _ = []
 compose ((k,v):sx) g = case lookup v g of
-  Nothing -> compose sx g
+  Nothing   -> compose sx g
   (Just v') -> (k, v') : compose sx g
 
 ------------------------------------------------------------------------------
