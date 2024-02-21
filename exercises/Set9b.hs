@@ -1,8 +1,8 @@
 module Set9b where
 
-import Mooc.Todo
+import           Mooc.Todo
 
-import Data.List
+import           Data.List
 
 --------------------------------------------------------------------------------
 -- Ex 1: In this exercise set, we'll solve the N Queens problem step by step.
@@ -103,7 +103,16 @@ nextCol (i,j) = (i, j + 1)
 type Size = Int
 
 prettyPrint :: Size -> [Coord] -> String
-prettyPrint = todo
+prettyPrint n queens = print n n queens'
+    where
+        queens' = map (\(row, col) -> (n - row + 1, n - col + 1)) $ sort queens
+
+        print 1 0 _ = "\n"
+        print r 0 qs = '\n' : print (r - 1) n qs
+        print r c [] = '.' : print r (c - 1) []
+        print r c (q:qs) = if q == (r, c)
+            then 'Q' : print r (c - 1) qs
+            else '.' : print r (c - 1) (q:qs)
 
 --------------------------------------------------------------------------------
 -- Ex 3: The task in this exercise is to define the relations sameRow, sameCol,
