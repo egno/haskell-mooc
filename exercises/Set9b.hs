@@ -200,7 +200,9 @@ type Candidate = Coord
 type Stack     = [Coord]
 
 danger :: Candidate -> Stack -> Bool
-danger = todo
+danger cand = any isDanger
+    where
+        isDanger queen = any (\f -> f cand queen) [sameRow, sameCol, sameDiag, sameAntidiag]
 
 --------------------------------------------------------------------------------
 -- Ex 5: In this exercise, the task is to write a modified version of
@@ -235,7 +237,16 @@ danger = todo
 -- solution to this version. Any working solution is okay in this exercise.)
 
 prettyPrint2 :: Size -> Stack -> String
-prettyPrint2 = todo
+prettyPrint2 n queens = print' n [(r,c) |r <- [1..n], c <- [1..n]]
+    where
+        print' _ []       = []
+        print' 0 xs       = '\n' : print' n xs
+        print' acc (x:xs) = symb x : print' (acc - 1) xs
+
+        symb coord
+            | coord `elem` queens = 'Q'
+            | coord `danger` queens = '#'
+            | otherwise = '.'
 
 --------------------------------------------------------------------------------
 -- Ex 6: Now that we can check if a piece can be safely placed into a square in
