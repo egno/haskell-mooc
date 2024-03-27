@@ -322,10 +322,10 @@ fixFirst n (s:sx) = checkDanger s sx
 --
 -- Hint: Remember nextRow and nextCol? Use them!
 continue :: Stack -> Stack
-continue ((r, c):sx) = (r + 1, 1) : (r, c) : sx
+continue (s:sx) = nextRow s : s : sx
 
 backtrack :: Stack -> Stack
-backtrack (_:(r, c):sx) = (r, c + 1) : sx
+backtrack (_:s:sx) = nextCol s : sx
 
 
 --------------------------------------------------------------------------------
