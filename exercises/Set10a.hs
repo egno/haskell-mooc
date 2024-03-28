@@ -16,8 +16,9 @@ import           Mooc.Todo
 --   doublify [7,1,6]          ==>  [7,7,1,1,6,6]
 --   take 10 (doublify [0..])  ==>  [0,0,1,1,2,2,3,3,4,4]
 doublify :: [a] -> [a]
-doublify [] = []
+doublify []     = []
 doublify (s:sx) = s : s : doublify sx
+
 
 ------------------------------------------------------------------------------
 -- Ex 2: Implement the function interleave that takes two lists and
@@ -37,7 +38,9 @@ doublify (s:sx) = s : s : doublify sx
 --   take 10 (interleave [7,7,7] [1..])    ==> [7,1,7,2,7,3,4,5,6,7]
 --   take 10 (interleave [1..] (repeat 0)) ==> [1,0,2,0,3,0,4,0,5,0]
 interleave :: [a] -> [a] -> [a]
-interleave = todo
+interleave a []          = a
+interleave [] b          = b
+interleave (a:ax) (b:bx) = a : b : interleave ax bx
 
 
 ------------------------------------------------------------------------------
