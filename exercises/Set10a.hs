@@ -59,7 +59,10 @@ interleave (a:ax) (b:bx) = a : b : interleave ax bx
 --
 -- Hint: remember the functions cycle and zip?
 deal :: [String] -> [String] -> [(String, String)]
-deal = todo
+deal players = deal' $ cycle players
+  where
+    deal' _ []          = []
+    deal' (p:px) (c:cx) = (c, p) : deal px cx
 
 
 ------------------------------------------------------------------------------
