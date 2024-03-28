@@ -101,7 +101,7 @@ averages = averages' 0.0 1
 --   take 20 (alternate "abc" "def" ',') ==> "abc,def,abc,def,abc,"
 --   take 10 (alternate [1,2] [3,4,5] 0) ==> [1,2,0,3,4,5,0,1,2,0]
 alternate :: [a] -> [a] -> a -> [a]
-alternate xs ys z = alternate' (repeat xs) (repeat ys) z
+alternate xs ys = alternate' (repeat xs) (repeat ys)
   where
     alternate' (a:as) (b:bs) z = a ++ [z] ++ b ++ [z] ++ alternate' as bs z
 
