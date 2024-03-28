@@ -115,7 +115,9 @@ alternate xs ys = alternate' (repeat xs) (repeat ys)
 --   lengthAtLeast 7 [1,2,3] ==> False
 --   lengthAtLeast 10 [0..]  ==> True
 lengthAtLeast :: Int -> [a] -> Bool
-lengthAtLeast = todo
+lengthAtLeast 0 _      = True
+lengthAtLeast _ []     = False
+lengthAtLeast x (y:ys) = lengthAtLeast (x - 1) ys
 
 
 ------------------------------------------------------------------------------
