@@ -135,7 +135,11 @@ lengthAtLeast x (y:ys) = lengthAtLeast (x - 1) ys
 --   chunks 2 [1,2,3,4] ==> [[1,2],[2,3],[3,4]]
 --   take 4 (chunks 3 [0..]) ==> [[0,1,2],[1,2,3],[2,3,4],[3,4,5]]
 chunks :: Int -> [a] -> [[a]]
-chunks = todo
+chunks _ [] = []
+chunks n (x:xs) =
+  if lengthAtLeast n (x : xs)
+    then take n (x : xs) : chunks n xs
+    else []
 
 
 ------------------------------------------------------------------------------
@@ -151,7 +155,16 @@ chunks = todo
 -- Examples:
 --   ignorecase "abC" == ignorecase "ABc"  ==>  True
 --   ignorecase "acC" == ignorecase "ABc"  ==>  False
-ignorecase = todo
+newtype IgnoreCase =
+  IgnoreCase String
+  deriving (Show)
+
+instance Eq IgnoreCase
+ where
+  (IgnoreCase x) == (IgnoreCase y) = map toLower x == map toLower y
+
+ignorecase :: String -> IgnoreCase
+ignorecase = IgnoreCase
 
 
 ------------------------------------------------------------------------------
@@ -198,4 +211,8 @@ play room (d:ds) =
     Just r  -> describe room : play r ds
 
 maze :: Room
-maze = todo
+maze = maze1
+  where
+    maze1 = Room "Maze" [("Left", maze2), ("Right", maze3)]
+    maze2 = Room "Deeper in the maze" [("Left", maze3), ("Right", maze1)]
+    maze3 = Room "Elsewhere in the maze" [("Left", maze1), ("Right", maze2)]
