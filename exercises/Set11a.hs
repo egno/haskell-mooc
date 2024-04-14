@@ -92,7 +92,10 @@ readUntil f = do
 ------------------------------------------------------------------------------
 -- Ex 6: given n, print the numbers from n to 0, one per line
 countdownPrint :: Int -> IO ()
-countdownPrint n = todo
+countdownPrint 0 = print 0
+countdownPrint n = do
+  print n
+  countdownPrint (n - 1)
 
 
 ------------------------------------------------------------------------------
