@@ -80,7 +80,13 @@ readWords n = do
 --   STOP
 --   ["bananas","garlic","pakchoi"]
 readUntil :: (String -> Bool) -> IO [String]
-readUntil f = todo
+readUntil f = do
+  line <- getLine
+  if f line
+    then return []
+    else do
+      lines <- readUntil f
+      return (line : lines)
 
 
 ------------------------------------------------------------------------------
