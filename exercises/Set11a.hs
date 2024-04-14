@@ -81,12 +81,12 @@ readWords n = do
 --   ["bananas","garlic","pakchoi"]
 readUntil :: (String -> Bool) -> IO [String]
 readUntil f = do
-  line <- getLine
-  if f line
+  x <- getLine
+  if f x
     then return []
     else do
-      lines <- readUntil f
-      return (line : lines)
+      xs <- readUntil f
+      return (x : xs)
 
 
 ------------------------------------------------------------------------------
