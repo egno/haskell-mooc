@@ -1,10 +1,11 @@
 module Set11a where
 
-import Control.Monad
-import Data.List
-import System.IO
+import           Control.Monad
+import           Data.List
+import           System.IO
 
-import Mooc.Todo
+import           Mooc.Todo
+
 
 -- Lecture 11:
 --   * The IO type
@@ -23,16 +24,19 @@ import Mooc.Todo
 ------------------------------------------------------------------------------
 -- Ex 1: define an IO operation hello that prints two lines. The
 -- first line should be HELLO and the second one WORLD
-
 hello :: IO ()
-hello = todo
+hello = do
+  putStrLn "HELLO"
+  putStrLn "WORLD"
+
 
 ------------------------------------------------------------------------------
 -- Ex 2: define the IO operation greet that takes a name as an
 -- argument and prints a line "HELLO name".
-
 greet :: String -> IO ()
-greet name = todo
+greet name = do
+  putStrLn ("HELLO " ++ name)
+
 
 ------------------------------------------------------------------------------
 -- Ex 3: define the IO operation greet2 that reads a name from the
@@ -40,9 +44,11 @@ greet name = todo
 -- exercise.
 --
 -- Try to use the greet operation in your solution.
-
 greet2 :: IO ()
-greet2 = todo
+greet2 = do
+  name <- getLine
+  putStrLn ("HELLO " ++ name)
+
 
 ------------------------------------------------------------------------------
 -- Ex 4: define the IO operation readWords n which reads n lines from
@@ -54,9 +60,11 @@ greet2 = todo
 --   alice
 --   carl
 --   ["alice","bob","carl"]
-
 readWords :: Int -> IO [String]
-readWords n = todo
+readWords n = do
+  names <- replicateM n getLine
+  return $ sort names
+
 
 ------------------------------------------------------------------------------
 -- Ex 5: define the IO operation readUntil f, which reads lines from
@@ -71,15 +79,15 @@ readWords n = todo
 --   pakchoi
 --   STOP
 --   ["bananas","garlic","pakchoi"]
-
 readUntil :: (String -> Bool) -> IO [String]
 readUntil f = todo
 
+
 ------------------------------------------------------------------------------
 -- Ex 6: given n, print the numbers from n to 0, one per line
-
 countdownPrint :: Int -> IO ()
 countdownPrint n = todo
+
 
 ------------------------------------------------------------------------------
 -- Ex 7: isums n should read n numbers from the user (one per line) and
@@ -92,17 +100,17 @@ countdownPrint n = todo
 --   3. user enters '5', should print '8' (3+5)
 --   4. user enters '1', should print '9' (3+5+1)
 --   5. produces 9
-
 isums :: Int -> IO Int
 isums n = todo
+
 
 ------------------------------------------------------------------------------
 -- Ex 8: when is a useful function, but its first argument has type
 -- Bool. Write a function that behaves similarly but the first
 -- argument has type IO Bool.
-
 whenM :: IO Bool -> IO () -> IO ()
 whenM cond op = todo
+
 
 ------------------------------------------------------------------------------
 -- Ex 9: implement the while loop. while condition operation should
@@ -117,12 +125,14 @@ whenM cond op = todo
 
 -- used in an example
 ask :: IO Bool
-ask = do putStrLn "Y/N?"
-         line <- getLine
-         return $ line == "Y"
+ask = do
+  putStrLn "Y/N?"
+  line <- getLine
+  return $ line == "Y"
 
 while :: IO Bool -> IO () -> IO ()
 while cond op = todo
+
 
 ------------------------------------------------------------------------------
 -- Ex 10: given a string and an IO operation, print the string, run
@@ -140,6 +150,5 @@ while cond op = todo
 --     2. reads a line from the user
 --     3. prints "BOOM"
 --     4. returns the line read from the user
-
 debug :: String -> IO a -> IO a
 debug s op = todo
