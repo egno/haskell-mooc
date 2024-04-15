@@ -110,7 +110,14 @@ countdownPrint n = do
 --   4. user enters '1', should print '9' (3+5+1)
 --   5. produces 9
 isums :: Int -> IO Int
-isums n = todo
+isums = isums' 0
+  where
+    isums' acc 0 = return acc
+    isums' acc n = do
+      i <- readLn
+      let acc' = acc + i
+      print acc'
+      isums' acc' (n - 1)
 
 
 ------------------------------------------------------------------------------
