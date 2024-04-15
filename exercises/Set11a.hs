@@ -149,7 +149,11 @@ ask = do
   return $ line == "Y"
 
 while :: IO Bool -> IO () -> IO ()
-while cond op = todo
+while cond op = whenM cond op'
+  where
+    op' = do
+      op
+      while cond op
 
 
 ------------------------------------------------------------------------------
