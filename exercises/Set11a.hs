@@ -125,7 +125,9 @@ isums = isums' 0
 -- Bool. Write a function that behaves similarly but the first
 -- argument has type IO Bool.
 whenM :: IO Bool -> IO () -> IO ()
-whenM cond op = todo
+whenM cond op = do
+  cond' <- cond
+  when cond' op
 
 
 ------------------------------------------------------------------------------
